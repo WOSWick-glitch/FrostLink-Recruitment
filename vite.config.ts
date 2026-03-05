@@ -41,8 +41,13 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    port: 5000,
+    strictPort: true,
     host: "0.0.0.0",
     allowedHosts: true,
+    hmr: {
+      clientPort: 443
+    },
     fs: {
       strict: true,
       deny: ["**/.*"],
