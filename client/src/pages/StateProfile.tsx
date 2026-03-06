@@ -112,6 +112,34 @@ export default function StateProfile() {
               <div className="space-y-6">
                 <div className="metallic-panel p-6">
                   <h3 className="font-display text-xl font-bold text-white mb-4 border-b border-white/10 pb-2">
+                    State Reputation
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span className="text-sm text-muted-foreground">Politics</span>
+                      <span className="font-mono text-white text-sm">{state.politics || "Unknown"}</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span className="text-sm text-muted-foreground">NAP Stability</span>
+                      <span className="font-mono text-white text-sm">{state.napStability || "Unknown"}</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span className="text-sm text-muted-foreground">SvS Coordination</span>
+                      <span className="font-mono text-white text-sm">{state.svsCoordination || "Unknown"}</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-1">
+                      <span className="text-sm text-muted-foreground">Drama Level</span>
+                      <span className={`font-mono text-sm font-bold ${
+                        state.dramaLevel === 'Low' ? 'text-green-400' :
+                        state.dramaLevel === 'Medium' ? 'text-yellow-400' :
+                        state.dramaLevel === 'High' ? 'text-red-400' : 'text-white'
+                      }`}>{state.dramaLevel || "Unknown"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="metallic-panel p-6">
+                  <h3 className="font-display text-xl font-bold text-white mb-4 border-b border-white/10 pb-2">
                     Transfer Rules
                   </h3>
                   <div className="space-y-4">

@@ -8,7 +8,11 @@ export const MOCK_STATES = [
     powerCapNotes: "Max 150M Power, 30M kills min",
     description: "Highly competitive state looking for strong leads. Won last 3 SvS.",
     lastUpdated: "2 hours ago",
-    topAlliancesCount: 5
+    topAlliancesCount: 5,
+    politics: "Council Led (Top 3)",
+    napStability: "High (Top 10 NAP)",
+    svsCoordination: "Excellent",
+    dramaLevel: "Low"
   },
   {
     id: 2,
@@ -19,7 +23,11 @@ export const MOCK_STATES = [
     powerCapNotes: "No cap, looking for active friendly players",
     description: "Peaceful state with NAP across top 10. Drama-free zone.",
     lastUpdated: "1 day ago",
-    topAlliancesCount: 3
+    topAlliancesCount: 3,
+    politics: "Dictatorship (Top 1)",
+    napStability: "Medium (Top 5 NAP)",
+    svsCoordination: "Average",
+    dramaLevel: "Medium"
   }
 ];
 
