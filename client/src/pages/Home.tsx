@@ -44,10 +44,15 @@ export default function Home() {
                 
                 <div className="grid md:grid-cols-2 gap-4">
                   {MOCK_ALLIANCES.map(alliance => (
-                    <div key={alliance.id} className="metallic-panel p-5 group hover:border-primary/50 transition-colors">
-                      <div className="flex justify-between items-start mb-4">
+                    <div key={alliance.id} className={`metallic-panel p-5 group transition-colors relative overflow-hidden ${alliance.isSponsored ? 'border-yellow-500/50 shadow-[0_0_15px_rgba(234,179,8,0.1)]' : 'hover:border-primary/50'}`}>
+                      {alliance.isSponsored && (
+                        <div className="absolute top-0 right-0 bg-yellow-500 text-black text-[10px] font-bold px-3 py-0.5 rounded-bl-lg">
+                          SPONSORED
+                        </div>
+                      )}
+                      <div className="flex justify-between items-start mb-4 mt-1">
                         <div>
-                          <h4 className="font-display text-xl font-bold text-white group-hover:text-primary transition-colors">
+                          <h4 className={`font-display text-xl font-bold group-hover:text-primary transition-colors ${alliance.isSponsored ? 'text-yellow-400' : 'text-white'}`}>
                             {alliance.name}
                           </h4>
                           <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">

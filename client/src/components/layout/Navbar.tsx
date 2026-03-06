@@ -39,6 +39,12 @@ export function Navbar() {
           
           <div className="w-px h-4 bg-white/10 mx-2"></div>
           
+          <Link href="/premium">
+            <span className="text-sm font-bold text-yellow-400 hover:text-yellow-300 transition-colors cursor-pointer flex items-center gap-1">
+              Upgrade
+            </span>
+          </Link>
+          
           <Link href="/login">
             <Button variant="ghost" className="text-sm font-medium hover:text-white">Sign In</Button>
           </Link>

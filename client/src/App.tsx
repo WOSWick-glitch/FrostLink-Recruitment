@@ -13,6 +13,7 @@ import States from "@/pages/States";
 import StateProfile from "@/pages/StateProfile";
 import Apply from "@/pages/Apply";
 import TransferTracker from "@/pages/TransferTracker";
+import Premium from "@/pages/Premium";
 
 function Router() {
   return (
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/player/:slug" component={PlayerProfile} />
 
       <Route path="/tracker" component={TransferTracker} />
+      <Route path="/premium" component={Premium} />
       
       {/* Fallback to 404 */}
       <Route component={NotFound} />

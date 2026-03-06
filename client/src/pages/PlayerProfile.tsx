@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { MOCK_PLAYERS } from "@/lib/mock-data";
 import { useParams } from "wouter";
-import { Shield, Swords, Activity, Flame, ChevronRight, CheckCircle2, ThumbsUp } from "lucide-react";
+import { Shield, Swords, Activity, Flame, ChevronRight, CheckCircle2, ThumbsUp, Star, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 
@@ -19,7 +19,7 @@ export default function PlayerProfile() {
         <div className="container mx-auto px-4 md:px-6 py-3 flex items-center text-sm text-muted-foreground font-mono">
           <Link href="/players"><a className="hover:text-white">Players</a></Link>
           <ChevronRight className="w-4 h-4 mx-2" />
-          <span className="text-white">{player.displayName}</span>
+          <span className={player.isPremium ? "text-blue-400 font-bold" : "text-white"}>{player.displayName}</span>
         </div>
       </div>
 
@@ -28,14 +28,26 @@ export default function PlayerProfile() {
           
           {/* Left Column - Character Sheet */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="metallic-panel p-1 relative overflow-hidden">
+            <div className={`metallic-panel p-1 relative overflow-hidden ${player.isPremium ? 'border-blue-500/50 shadow-[0_0_30px_rgba(59,130,246,0.2)]' : ''}`}>
+              {player.isPremium && (
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 blur-3xl rounded-full z-0"></div>
+              )}
               <div className="bg-card border border-white/5 rounded-md p-6 h-full relative z-10 flex flex-col items-center text-center">
                 
-                <div className="w-24 h-24 rounded-full bg-primary/10 border-2 border-primary/50 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(0,229,255,0.3)]">
-                  <Swords className="w-10 h-10 text-primary" />
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-4 relative ${
+                  player.isPremium 
+                    ? 'bg-blue-500/20 border-2 border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.4)]' 
+                    : 'bg-primary/10 border-2 border-primary/50 shadow-[0_0_20px_rgba(0,229,255,0.3)]'
+                }`}>
+                  <Swords className={`w-10 h-10 ${player.isPremium ? 'text-blue-400' : 'text-primary'}`} />
+                  {player.isPremium && (
+                    <div className="absolute -bottom-2 -right-2 bg-blue-600 rounded-full p-1 border-2 border-background">
+                      <Star className="w-4 h-4 text-white fill-white" />
+                    </div>
+                  )}
                 </div>
                 
-                <h1 className="font-display text-3xl font-bold text-white mb-1 flex items-center gap-2">
+                <h1 className={`font-display text-3xl font-bold mb-1 flex items-center gap-2 ${player.isPremium ? 'text-blue-400 text-shadow-glow-blue' : 'text-white'}`}>
                   {player.displayName}
                   {player.reputation > 90 && (
                     <CheckCircle2 className="w-5 h-5 text-primary" title="Highly Verified" />
@@ -72,6 +84,15 @@ export default function PlayerProfile() {
                   <div className="flex justify-between items-center border-b border-white/10 pb-2">
                     <span className="text-sm text-muted-foreground">Language</span>
                     <span className="font-mono text-white">{player.language}</span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-white/10 pb-2">
+                    <span className="text-sm text-muted-foreground flex items-center gap-1">Discord <Lock className="w-3 h-3" /></span>
+                    <div className="group relative cursor-pointer">
+                      <span className="font-mono text-white blur-sm select-none">Hidden#0000</span>
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-[10px] bg-primary text-primary-foreground px-2 py-0.5 rounded font-bold">PRO REQUIRED</span>
+                      </div>
+                    </div>
                   </div>
                   <div className="flex justify-between items-center pt-2">
                     <span className="text-sm text-muted-foreground">Last Updated</span>

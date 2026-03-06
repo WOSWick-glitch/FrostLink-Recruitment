@@ -43,6 +43,7 @@ export const MOCK_ALLIANCES = [
     openSlotsEstimate: 12,
     description: "Top 1 alliance in 1042. Looking for dedicated fighters for the upcoming SvS. Must be on Discord.",
     lastUpdated: "5 hours ago",
+    isSponsored: true,
     logo: "VNG"
   },
   {
@@ -76,6 +77,8 @@ export const MOCK_PLAYERS = [
     visibility: true,
     lastUpdated: "10 mins ago",
     statsStatus: "Up to Date",
+    isPremium: true,
+    discord: "FrostKing#1234",
     reputation: 98,
     endorsements: [
       { id: 1, type: "verified_recruiter", tag: "Reliable Lead" },
@@ -103,6 +106,8 @@ export const MOCK_PLAYERS = [
     visibility: true,
     lastUpdated: "1 day ago",
     statsStatus: "Up to Date",
+    isPremium: false,
+    discord: "SnowQueen#5678",
     reputation: 85,
     endorsements: [
       { id: 3, type: "verified_recruiter", tag: "Friendly" }
@@ -129,6 +134,8 @@ export const MOCK_PLAYERS = [
     visibility: false,
     lastUpdated: "3 weeks ago",
     statsStatus: "Update Required",
+    isPremium: false,
+    discord: "Shadow#9999",
     reputation: 92,
     endorsements: [],
     stats: {

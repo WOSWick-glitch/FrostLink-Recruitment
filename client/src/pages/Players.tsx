@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { MOCK_PLAYERS } from "@/lib/mock-data";
-import { Search, Filter, Swords, ChevronDown, CheckCircle2 } from "lucide-react";
+import { Search, Filter, Swords, ChevronDown, CheckCircle2, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
@@ -72,11 +72,20 @@ export default function Players() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {MOCK_PLAYERS.map(player => (
-            <div key={player.id} className="metallic-panel group flex flex-col h-full hover:-translate-y-1 transition-transform duration-300">
-              <div className="p-5 flex-1">
+            <div key={player.id} className={`metallic-panel group flex flex-col h-full hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden ${player.isPremium ? 'border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.15)]' : ''}`}>
+              {player.isPremium && (
+                <div className="absolute -right-6 top-6 bg-blue-600 text-white text-[10px] font-bold px-8 py-1 rotate-45 flex items-center gap-1 shadow-[0_0_10px_rgba(59,130,246,0.5)] z-10">
+                  <Star className="w-3 h-3 fill-white" /> PREMIUM
+                </div>
+              )}
+              {player.isPremium && (
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent z-0"></div>
+              )}
+              
+              <div className="p-5 flex-1 relative z-10">
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <h3 className="font-display text-xl font-bold text-white group-hover:text-primary transition-colors flex items-center gap-2">
+                    <h3 className={`font-display text-xl font-bold transition-colors flex items-center gap-2 ${player.isPremium ? 'text-blue-400 group-hover:text-blue-300' : 'text-white group-hover:text-primary'}`}>
                       {player.displayName}
                       {player.reputation > 90 && (
                         <CheckCircle2 className="w-4 h-4 text-primary" />
