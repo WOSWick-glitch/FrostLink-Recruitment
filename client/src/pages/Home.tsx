@@ -166,18 +166,26 @@ export default function Home() {
       
       {/* Mini Footer / Trust & Safety */}
       <footer className="py-8 bg-background border-t border-white/10">
-        <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Snowflake className="w-5 h-5 text-primary" />
-            <span className="font-display font-bold text-lg text-white">FROST<span className="text-primary">LINK</span></span>
+        <div className="container mx-auto px-4 md:px-6 flex flex-col items-center gap-6">
+          <div className="flex flex-col md:flex-row items-center justify-between w-full gap-4">
+            <div className="flex items-center gap-2">
+              <Snowflake className="w-5 h-5 text-primary" />
+              <span className="font-display font-bold text-lg text-white">FROST<span className="text-primary">LINK</span></span>
+            </div>
+            <div className="text-sm text-muted-foreground flex gap-4">
+              <Link href="/about"><a className="hover:text-white">About</a></Link>
+              <Link href="/rules"><a className="hover:text-white">Rules</a></Link>
+              <Link href="/privacy"><a className="hover:text-white">Privacy</a></Link>
+            </div>
+            <div className="text-xs text-muted-foreground/50">
+              A controlled recruitment environment. Verified endorsements only.
+            </div>
           </div>
-          <div className="text-sm text-muted-foreground flex gap-4">
-            <Link href="/about"><a className="hover:text-white">About</a></Link>
-            <Link href="/rules"><a className="hover:text-white">Rules</a></Link>
-            <Link href="/privacy"><a className="hover:text-white">Privacy</a></Link>
-          </div>
-          <div className="text-xs text-muted-foreground/50">
-            A controlled recruitment environment. Verified endorsements only.
+          
+          <div className="max-w-3xl text-center border-t border-white/5 pt-6 mt-2">
+            <p className="text-[10px] text-muted-foreground/40 font-mono uppercase tracking-wider">
+              DISCLAIMER: FrostLink is an independent, community-driven platform and is NOT affiliated with, endorsed by, sponsored by, or officially connected to Whiteout Survival, Century Games, or any of their partners. This tool is built by players, for players, to improve the recruitment and transfer season experience.
+            </p>
           </div>
         </div>
       </footer>
