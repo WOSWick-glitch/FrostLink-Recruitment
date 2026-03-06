@@ -43,13 +43,19 @@ export default function Players() {
               Transfer Ready
             </Button>
             <Button variant="outline" size="sm" className="border-white/10 bg-transparent text-muted-foreground hover:text-white">
-              Garrison Leads <ChevronDown className="w-3 h-3 ml-1" />
+              Furnace Level <ChevronDown className="w-3 h-3 ml-1" />
             </Button>
             <Button variant="outline" size="sm" className="border-white/10 bg-transparent text-muted-foreground hover:text-white">
-              Power: 100M+ <ChevronDown className="w-3 h-3 ml-1" />
+              Hero Power <ChevronDown className="w-3 h-3 ml-1" />
             </Button>
             <Button variant="outline" size="sm" className="border-white/10 bg-transparent text-muted-foreground hover:text-white">
-              Timezone: NA <ChevronDown className="w-3 h-3 ml-1" />
+              State Age <ChevronDown className="w-3 h-3 ml-1" />
+            </Button>
+            <Button variant="outline" size="sm" className="border-white/10 bg-transparent text-muted-foreground hover:text-white">
+              Language <ChevronDown className="w-3 h-3 ml-1" />
+            </Button>
+            <Button variant="outline" size="sm" className="border-white/10 bg-transparent text-muted-foreground hover:text-white">
+              Role <ChevronDown className="w-3 h-3 ml-1" />
             </Button>
           </div>
         </div>
