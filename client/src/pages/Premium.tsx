@@ -27,7 +27,7 @@ export default function Premium() {
                 <Star className="w-6 h-6 text-blue-400" />
               </div>
               <h3 className="font-display text-2xl font-bold text-white mb-2">Player Premium</h3>
-              <div className="text-3xl font-bold text-white mb-1">$4.99<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
+              <div className="text-3xl font-bold text-white mb-1">$2.00<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
               <p className="text-sm text-muted-foreground">Get noticed by top alliances faster.</p>
             </div>
             
@@ -56,7 +56,7 @@ export default function Premium() {
                 <Shield className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-display text-2xl font-bold text-white mb-2">Recruiter Pro</h3>
-              <div className="text-3xl font-bold text-white mb-1">$14.99<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
+              <div className="text-3xl font-bold text-white mb-1">$5.00<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
               <p className="text-sm text-muted-foreground">Everything you need to scout talent.</p>
             </div>
             
@@ -85,7 +85,7 @@ export default function Premium() {
                 <Zap className="w-6 h-6 text-yellow-400" />
               </div>
               <h3 className="font-display text-2xl font-bold text-white mb-2">Alliance Sponsor</h3>
-              <div className="text-3xl font-bold text-white mb-1">$49.99<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
+              <div className="text-3xl font-bold text-white mb-1">$10.00<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
               <p className="text-sm text-muted-foreground">Fill your roster in record time.</p>
             </div>
             
