@@ -1,11 +1,16 @@
 import { Navbar } from "@/components/layout/Navbar";
-import { MOCK_ALLIANCES } from "@/lib/mock-data";
 import { Search, Filter, Shield, ChevronDown, Globe2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import type { Alliance } from "@shared/schema";
 
 export default function Alliances() {
+  const { data: alliances = [], isLoading } = useQuery<Alliance[]>({
+    queryKey: ["/api/alliances"],
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -27,9 +32,10 @@ export default function Alliances() {
                 <Input 
                   placeholder="Search by name or state..." 
                   className="pl-9 bg-black/40 border-white/10 focus-visible:ring-primary h-10"
+                  data-testid="input-search-alliances"
                 />
               </div>
-              <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 h-10 px-3">
+              <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 h-10 px-3" data-testid="button-filters">
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
               </Button>
@@ -52,12 +58,14 @@ export default function Alliances() {
 
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
         <div className="flex justify-between items-center mb-6">
-          <p className="text-sm text-muted-foreground font-mono">Showing {MOCK_ALLIANCES.length} alliances</p>
+          <p className="text-sm text-muted-foreground font-mono">
+            {isLoading ? "Loading..." : `Showing ${alliances.length} alliances`}
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MOCK_ALLIANCES.map(alliance => (
-            <div key={alliance.id} className="metallic-panel group flex flex-col h-full hover:border-primary/50 transition-colors">
+          {alliances.map(alliance => (
+            <div key={alliance.id} data-testid={`card-alliance-${alliance.id}`} className="metallic-panel group flex flex-col h-full hover:border-primary/50 transition-colors">
               <div className="p-5 flex-1">
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">
@@ -113,11 +121,11 @@ export default function Alliances() {
                     Updated {alliance.lastUpdated}
                   </span>
                   <Link href={`/alliance/${alliance.slug}`}>
-                    <a className="text-sm text-primary hover:text-white transition-colors">Details</a>
+                    <span className="text-sm text-primary hover:text-white transition-colors cursor-pointer">Details</span>
                   </Link>
                 </div>
                 <Link href={`/apply/${alliance.slug}`}>
-                  <Button className="w-full bg-primary/20 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/50 shadow-[0_0_10px_rgba(0,229,255,0.2)]">
+                  <Button className="w-full bg-primary/20 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/50 shadow-[0_0_10px_rgba(0,229,255,0.2)]" data-testid={`button-apply-${alliance.id}`}>
                     Apply Now
                   </Button>
                 </Link>

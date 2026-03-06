@@ -1,30 +1,40 @@
-import { MOCK_ALLIANCES } from "@/lib/mock-data";
 import { useParams, Link, useLocation } from "wouter";
 import { Shield, Snowflake, ArrowLeft, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useQuery } from "@tanstack/react-query";
+import type { Alliance } from "@shared/schema";
 
 export default function Apply() {
   const { slug } = useParams<{ slug: string }>();
-  const alliance = MOCK_ALLIANCES.find(a => a.slug === slug) || MOCK_ALLIANCES[0];
   const [, setLocation] = useLocation();
+
+  const { data: alliance, isLoading } = useQuery<Alliance>({
+    queryKey: [`/api/alliances/${slug}`],
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate submission and redirect back to players dashboard or success page
     alert("Application submitted successfully!");
     setLocation("/players"); 
   };
 
+  if (isLoading || !alliance) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground font-mono">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Minimal Navbar for apply flow */}
       <header className="border-b border-white/10 bg-card/50 backdrop-blur-md h-16 flex items-center">
         <div className="container mx-auto px-4 flex items-center justify-between">
           <Link href={`/alliance/${alliance.slug}`}>
-            <a className="text-sm text-muted-foreground hover:text-white flex items-center gap-2">
+            <span className="text-sm text-muted-foreground hover:text-white flex items-center gap-2 cursor-pointer">
               <ArrowLeft className="w-4 h-4" /> Back to Alliance
-            </a>
+            </span>
           </Link>
           <div className="flex items-center gap-2">
             <Snowflake className="w-5 h-5 text-primary" />
@@ -64,6 +74,7 @@ export default function Apply() {
                 <Textarea 
                   placeholder="Share a bit about your playstyle, availability for events, etc."
                   className="bg-black/40 border-white/10 focus-visible:ring-primary min-h-[120px]"
+                  data-testid="input-application-message"
                 />
               </div>
 
@@ -74,7 +85,7 @@ export default function Apply() {
                 </p>
               </div>
 
-              <Button type="submit" className="w-full h-12 text-lg bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(0,229,255,0.4)]">
+              <Button type="submit" className="w-full h-12 text-lg bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(0,229,255,0.4)]" data-testid="button-send-application">
                 <Send className="w-5 h-5 mr-2" />
                 Send Application
               </Button>

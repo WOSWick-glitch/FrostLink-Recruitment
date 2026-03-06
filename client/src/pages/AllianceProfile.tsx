@@ -1,12 +1,27 @@
 import { Navbar } from "@/components/layout/Navbar";
-import { MOCK_ALLIANCES } from "@/lib/mock-data";
 import { useParams, Link } from "wouter";
 import { Shield, ChevronRight, Globe2, Users, CheckSquare, Copy, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import type { Alliance } from "@shared/schema";
 
 export default function AllianceProfile() {
   const { slug } = useParams<{ slug: string }>();
-  const alliance = MOCK_ALLIANCES.find(a => a.slug === slug) || MOCK_ALLIANCES[0];
+  
+  const { data: alliance, isLoading } = useQuery<Alliance>({
+    queryKey: [`/api/alliances/${slug}`],
+  });
+
+  if (isLoading || !alliance) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-muted-foreground font-mono">Loading alliance...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -14,9 +29,9 @@ export default function AllianceProfile() {
       
       <div className="border-b border-white/10 bg-black/40">
         <div className="container mx-auto px-4 md:px-6 py-3 flex items-center text-sm text-muted-foreground font-mono">
-          <Link href="/alliances"><a className="hover:text-white">Alliances</a></Link>
+          <Link href="/alliances"><span className="hover:text-white cursor-pointer">Alliances</span></Link>
           <ChevronRight className="w-4 h-4 mx-2" />
-          <Link href={`/state/${alliance.stateNumber}`}><a className="hover:text-white">State #{alliance.stateNumber}</a></Link>
+          <Link href={`/state/${alliance.stateNumber}`}><span className="hover:text-white cursor-pointer">State #{alliance.stateNumber}</span></Link>
           <ChevronRight className="w-4 h-4 mx-2" />
           <span className="text-white">{alliance.name}</span>
         </div>
@@ -26,7 +41,6 @@ export default function AllianceProfile() {
         
         <div className="grid lg:grid-cols-12 gap-8">
           
-          {/* Main Info Column */}
           <div className="lg:col-span-8 space-y-6">
             <div className="metallic-panel p-8 relative overflow-hidden">
                <div className="absolute top-0 right-0 p-8 opacity-5">
@@ -95,7 +109,6 @@ export default function AllianceProfile() {
             </div>
           </div>
 
-          {/* Action / Apply Column */}
           <div className="lg:col-span-4 space-y-6">
             <div className="metallic-panel p-6 border-primary/50 shadow-[0_0_30px_rgba(0,229,255,0.1)]">
               <div className="text-center mb-6">
@@ -107,12 +120,12 @@ export default function AllianceProfile() {
               </div>
               
               <Link href={`/apply/${alliance.slug}`}>
-                <Button className="w-full h-14 text-lg bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_rgba(0,229,255,0.5)] mb-4 transition-all hover:scale-105">
+                <Button className="w-full h-14 text-lg bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_rgba(0,229,255,0.5)] mb-4 transition-all hover:scale-105" data-testid="button-submit-application">
                   Submit Application
                 </Button>
               </Link>
               
-              <Button variant="outline" className="w-full border-white/10 bg-black/40 hover:bg-white/5 text-white flex items-center justify-center gap-2">
+              <Button variant="outline" className="w-full border-white/10 bg-black/40 hover:bg-white/5 text-white flex items-center justify-center gap-2" data-testid="button-copy-link">
                 <Copy className="w-4 h-4" /> Copy Apply Link
               </Button>
               
@@ -124,7 +137,6 @@ export default function AllianceProfile() {
             <div className="metallic-panel p-6">
               <h3 className="font-display text-lg font-bold text-white mb-3">Recruiters</h3>
               <div className="space-y-3">
-                {/* Mock recruiters */}
                 <div className="flex items-center gap-3 bg-black/30 p-2 rounded">
                   <div className="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-xs font-bold">R5</div>
                   <div>

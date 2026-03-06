@@ -10,14 +10,14 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-md">
       <div className="container mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
         <Link href="/">
-          <a className="flex items-center gap-2 group">
+          <span className="flex items-center gap-2 group cursor-pointer">
             <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/50 group-hover:shadow-[0_0_15px_rgba(0,229,255,0.5)] transition-all">
               <Snowflake className="w-5 h-5 text-primary" />
             </div>
             <span className="font-display font-bold text-xl tracking-wider text-white">
               FROST<span className="text-primary">LINK</span>
             </span>
-          </a>
+          </span>
         </Link>
 
         {/* Desktop Nav */}

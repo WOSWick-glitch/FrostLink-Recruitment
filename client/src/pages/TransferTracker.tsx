@@ -1,8 +1,20 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Users, Globe2, Shield, ArrowUpRight, Activity } from "lucide-react";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import type { TransferGroup, State, Alliance } from "@shared/schema";
 
 export default function TransferTracker() {
+  const { data: groups = [] } = useQuery<TransferGroup[]>({
+    queryKey: ["/api/transfer-groups"],
+  });
+  const { data: states = [] } = useQuery<State[]>({
+    queryKey: ["/api/states"],
+  });
+  const { data: alliances = [] } = useQuery<Alliance[]>({
+    queryKey: ["/api/alliances"],
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -24,135 +36,90 @@ export default function TransferTracker() {
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           
-          {/* Active Transfer Groups */}
           <div className="space-y-4">
             <h2 className="text-xl font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2">
               <Users className="w-5 h-5 text-primary" />
               Active Transfer Groups
             </h2>
             
-            <div className="metallic-panel p-4 hover:border-primary/30 transition-colors">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-bold text-white">Project Vanguard</h3>
-                <span className="text-xs bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 rounded">Forming</span>
+            {groups.map(group => (
+              <div key={group.id} data-testid={`card-transfer-group-${group.id}`} className="metallic-panel p-4 hover:border-primary/30 transition-colors">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-white">{group.name}</h3>
+                  <span className={`text-xs px-2 py-0.5 rounded border ${
+                    group.status === 'Forming' 
+                      ? 'bg-primary/20 text-primary border-primary/30' 
+                      : 'bg-green-500/20 text-green-400 border-green-500/30'
+                  }`}>{group.status}</span>
+                </div>
+                <p className="text-sm text-gray-400 mb-3">{group.description}</p>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground">Led by: {group.leader}</span>
+                  <span className="text-primary hover:underline cursor-pointer">View Details <ArrowUpRight className="w-3 h-3 inline" /></span>
+                </div>
               </div>
-              <p className="text-sm text-gray-400 mb-3">Group of 15 players (1.2B total power) looking for a competitive state to take over.</p>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-muted-foreground">Led by: FrostKing</span>
-                <span className="text-primary hover:underline cursor-pointer">View Details <ArrowUpRight className="w-3 h-3 inline" /></span>
-              </div>
-            </div>
-
-            <div className="metallic-panel p-4 hover:border-primary/30 transition-colors">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-bold text-white">Casual Collective</h3>
-                <span className="text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-0.5 rounded">Moving Soon</span>
-              </div>
-              <p className="text-sm text-gray-400 mb-3">Small group of 5 friends looking for a peaceful state with strong NAP rules.</p>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-muted-foreground">Led by: SnowQueen</span>
-                <span className="text-primary hover:underline cursor-pointer">View Details <ArrowUpRight className="w-3 h-3 inline" /></span>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* States Recruiting */}
           <div className="space-y-4">
             <h2 className="text-xl font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2">
               <Globe2 className="w-5 h-5 text-primary" />
               States Recruiting
             </h2>
             
-            <div className="metallic-panel p-4 hover:border-primary/30 transition-colors">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-bold text-white text-lg">State #1042</h3>
-                <span className="text-xs text-orange-400 flex items-center gap-1">Highly Active</span>
-              </div>
-              <p className="text-sm text-gray-400 mb-3">Looking for strong leads. Won last 3 SvS.</p>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <div className="bg-black/30 p-2 rounded text-center">
-                  <span className="block text-[10px] text-muted-foreground uppercase">Power Cap</span>
-                  <span className="text-sm font-mono text-white">150M</span>
+            {states.map(state => (
+              <div key={state.id} data-testid={`card-tracker-state-${state.id}`} className="metallic-panel p-4 hover:border-primary/30 transition-colors">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-bold text-white text-lg">State #{state.stateNumber}</h3>
+                  <span className="text-xs text-green-400 flex items-center gap-1">{state.recruitingStatus}</span>
                 </div>
-                <div className="bg-black/30 p-2 rounded text-center">
-                  <span className="block text-[10px] text-muted-foreground uppercase">Type</span>
-                  <span className="text-sm font-mono text-white">Competitive</span>
+                <p className="text-sm text-gray-400 mb-3">{state.description}</p>
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <div className="bg-black/30 p-2 rounded text-center">
+                    <span className="block text-[10px] text-muted-foreground uppercase">Power Cap</span>
+                    <span className="text-sm font-mono text-white">{state.powerCapNotes?.split(',')[0] || 'None'}</span>
+                  </div>
+                  <div className="bg-black/30 p-2 rounded text-center">
+                    <span className="block text-[10px] text-muted-foreground uppercase">Type</span>
+                    <span className="text-sm font-mono text-white">{state.playstyle}</span>
+                  </div>
                 </div>
+                <Link href={`/state/${state.stateNumber}`}>
+                  <span className="block w-full text-center text-xs bg-white/5 hover:bg-white/10 text-white py-2 rounded transition-colors cursor-pointer">View State Profile</span>
+                </Link>
               </div>
-              <Link href="/state/1042">
-                <span className="block w-full text-center text-xs bg-white/5 hover:bg-white/10 text-white py-2 rounded transition-colors cursor-pointer">View State Profile</span>
-              </Link>
-            </div>
-
-            <div className="metallic-panel p-4 hover:border-primary/30 transition-colors">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-bold text-white text-lg">State #998</h3>
-                <span className="text-xs text-green-400 flex items-center gap-1">Open</span>
-              </div>
-              <p className="text-sm text-gray-400 mb-3">Peaceful state with NAP across top 10.</p>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <div className="bg-black/30 p-2 rounded text-center">
-                  <span className="block text-[10px] text-muted-foreground uppercase">Power Cap</span>
-                  <span className="text-sm font-mono text-white">None</span>
-                </div>
-                <div className="bg-black/30 p-2 rounded text-center">
-                  <span className="block text-[10px] text-muted-foreground uppercase">Type</span>
-                  <span className="text-sm font-mono text-white">Casual</span>
-                </div>
-              </div>
-              <Link href="/state/998">
-                <span className="block w-full text-center text-xs bg-white/5 hover:bg-white/10 text-white py-2 rounded transition-colors cursor-pointer">View State Profile</span>
-              </Link>
-            </div>
+            ))}
           </div>
 
-          {/* Alliances Recruiting */}
           <div className="space-y-4">
             <h2 className="text-xl font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2">
               <Shield className="w-5 h-5 text-primary" />
               Alliances Recruiting
             </h2>
             
-            <div className="metallic-panel p-4 hover:border-primary/30 transition-colors">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h3 className="font-bold text-white">[VNG] Vanguard</h3>
-                  <p className="text-xs text-muted-foreground">State #1042</p>
+            {alliances.map(alliance => (
+              <div key={alliance.id} data-testid={`card-tracker-alliance-${alliance.id}`} className="metallic-panel p-4 hover:border-primary/30 transition-colors">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h3 className="font-bold text-white">{alliance.name}</h3>
+                    <p className="text-xs text-muted-foreground">State #{alliance.stateNumber}</p>
+                  </div>
+                  <span className={`text-xs font-bold ${alliance.recruitingStatus === 'Open' ? 'text-green-400' : 'text-yellow-400'}`}>{alliance.recruitingStatus}</span>
                 </div>
-                <span className="text-xs font-bold text-green-400">Open</span>
-              </div>
-              <p className="text-sm text-gray-400 mb-3">Top 1 alliance in 1042. Looking for dedicated fighters.</p>
-              <div className="mb-3">
-                <span className="text-[10px] text-muted-foreground uppercase block mb-1">Looking For</span>
-                <div className="flex flex-wrap gap-1">
-                  <span className="text-[10px] bg-primary/10 border border-primary/20 px-2 py-0.5 rounded text-primary">Garrison Lead</span>
-                  <span className="text-[10px] bg-primary/10 border border-primary/20 px-2 py-0.5 rounded text-primary">Rally Lead</span>
+                <p className="text-sm text-gray-400 mb-3">{alliance.description}</p>
+                <div className="mb-3">
+                  <span className="text-[10px] text-muted-foreground uppercase block mb-1">Looking For</span>
+                  <div className="flex flex-wrap gap-1">
+                    {alliance.lookingFor.slice(0, 2).map(role => (
+                      <span key={role} className="text-[10px] bg-primary/10 border border-primary/20 px-2 py-0.5 rounded text-primary">{role}</span>
+                    ))}
+                  </div>
                 </div>
+                <Link href={`/alliance/${alliance.slug}`}>
+                  <span className="block w-full text-center text-xs bg-primary/20 hover:bg-primary/30 text-primary py-2 rounded transition-colors cursor-pointer">Apply to Join</span>
+                </Link>
               </div>
-              <Link href="/alliance/vng-vanguard">
-                <span className="block w-full text-center text-xs bg-primary/20 hover:bg-primary/30 text-primary py-2 rounded transition-colors cursor-pointer">Apply to Join</span>
-              </Link>
-            </div>
-
-            <div className="metallic-panel p-4 hover:border-primary/30 transition-colors">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h3 className="font-bold text-white">[AwK] Awakened</h3>
-                  <p className="text-xs text-muted-foreground">State #998</p>
-                </div>
-                <span className="text-xs font-bold text-yellow-400">Limited</span>
-              </div>
-              <p className="text-sm text-gray-400 mb-3">Friendly community focused on growth and events.</p>
-              <div className="mb-3">
-                <span className="text-[10px] text-muted-foreground uppercase block mb-1">Looking For</span>
-                <div className="flex flex-wrap gap-1">
-                  <span className="text-[10px] bg-primary/10 border border-primary/20 px-2 py-0.5 rounded text-primary">Event Organizer</span>
-                </div>
-              </div>
-              <Link href="/alliance/awk-awakened">
-                <span className="block w-full text-center text-xs bg-primary/20 hover:bg-primary/30 text-primary py-2 rounded transition-colors cursor-pointer">Apply to Join</span>
-              </Link>
-            </div>
+            ))}
           </div>
 
         </div>

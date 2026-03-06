@@ -1,23 +1,39 @@
 import { Navbar } from "@/components/layout/Navbar";
-import { MOCK_PLAYERS } from "@/lib/mock-data";
 import { useParams } from "wouter";
 import { Shield, Swords, Activity, Flame, ChevronRight, CheckCircle2, ThumbsUp, Star, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import type { Player } from "@shared/schema";
 
 export default function PlayerProfile() {
   const { slug } = useParams<{ slug: string }>();
-  // In a real app, we'd fetch the player by slug
-  const player = MOCK_PLAYERS.find(p => p.slug === slug) || MOCK_PLAYERS[0];
+  
+  const { data: player, isLoading } = useQuery<Player>({
+    queryKey: [`/api/players/${slug}`],
+  });
+
+  if (isLoading || !player) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-muted-foreground font-mono">Loading player...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const endorsements = (player.endorsements || []) as any[];
+  const stats = (player.stats || {}) as any;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      {/* Breadcrumbs */}
       <div className="border-b border-white/10 bg-black/40">
         <div className="container mx-auto px-4 md:px-6 py-3 flex items-center text-sm text-muted-foreground font-mono">
-          <Link href="/players"><a className="hover:text-white">Players</a></Link>
+          <Link href="/players"><span className="hover:text-white cursor-pointer">Players</span></Link>
           <ChevronRight className="w-4 h-4 mx-2" />
           <span className={player.isPremium ? "text-blue-400 font-bold" : "text-white"}>{player.displayName}</span>
         </div>
@@ -26,7 +42,6 @@ export default function PlayerProfile() {
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
         <div className="grid lg:grid-cols-12 gap-8">
           
-          {/* Left Column - Character Sheet */}
           <div className="lg:col-span-4 space-y-6">
             <div className={`metallic-panel p-1 relative overflow-hidden ${player.isPremium ? 'border-blue-500/50 shadow-[0_0_30px_rgba(59,130,246,0.2)]' : ''}`}>
               {player.isPremium && (
@@ -47,7 +62,7 @@ export default function PlayerProfile() {
                   )}
                 </div>
                 
-                <h1 className={`font-display text-3xl font-bold mb-1 flex items-center gap-2 ${player.isPremium ? 'text-blue-400 text-shadow-glow-blue' : 'text-white'}`}>
+                <h1 className={`font-display text-3xl font-bold mb-1 flex items-center gap-2 ${player.isPremium ? 'text-blue-400' : 'text-white'}`}>
                   {player.displayName}
                   {player.reputation > 90 && (
                     <CheckCircle2 className="w-5 h-5 text-primary" title="Highly Verified" />
@@ -102,14 +117,13 @@ export default function PlayerProfile() {
               </div>
             </div>
 
-            {/* Endorsements Panel */}
             <div className="metallic-panel p-6">
               <h3 className="font-display text-xl font-bold text-white mb-4 border-b border-white/10 pb-2 flex items-center gap-2">
                 <ThumbsUp className="w-5 h-5 text-primary" />
                 Endorsements
               </h3>
               <div className="space-y-3">
-                {player.endorsements.map(end => (
+                {endorsements.map((end: any) => (
                   <div key={end.id} className="bg-black/40 border border-white/5 rounded p-3 flex items-start gap-3">
                     <div className="mt-1">
                       {end.type === 'state_staff' ? (
@@ -130,20 +144,17 @@ export default function PlayerProfile() {
             </div>
           </div>
 
-          {/* Right Column - Stats & Details */}
           <div className="lg:col-span-8 space-y-6">
             
-            {/* Action Bar */}
             <div className="flex justify-end gap-3">
-              <Button variant="outline" className="border-white/10 bg-black/40 hover:bg-white/5 text-white">
+              <Button variant="outline" className="border-white/10 bg-black/40 hover:bg-white/5 text-white" data-testid="button-save-profile">
                 Save Profile
               </Button>
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(0,229,255,0.4)]">
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(0,229,255,0.4)]" data-testid="button-invite">
                 Invite to Alliance
               </Button>
             </div>
 
-            {/* Runescape Style Stats Grid */}
             <div className="metallic-panel p-6">
               <h2 className="font-display text-2xl font-bold text-white mb-6 flex items-center gap-2">
                 <Activity className="w-6 h-6 text-primary" />
@@ -161,16 +172,15 @@ export default function PlayerProfile() {
                 </div>
                 <div className="runescape-stat-box p-4 border-red-500/20">
                   <span className="text-xs text-red-400 uppercase font-bold tracking-wider mb-1">Total Kills</span>
-                  <span className="text-lg md:text-xl font-mono text-white font-bold">{player.stats?.kills || "N/A"}</span>
+                  <span className="text-lg md:text-xl font-mono text-white font-bold">{stats?.kills || "N/A"}</span>
                 </div>
                 <div className="runescape-stat-box p-4 border-orange-500/20">
                   <span className="text-xs text-orange-400 uppercase font-bold tracking-wider mb-1">Highest Power</span>
-                  <span className="text-lg md:text-xl font-mono text-white font-bold">{player.stats?.highestPower || "N/A"}</span>
+                  <span className="text-lg md:text-xl font-mono text-white font-bold">{stats?.highestPower || "N/A"}</span>
                 </div>
               </div>
             </div>
 
-            {/* Details & Looking For */}
             <div className="grid md:grid-cols-2 gap-6">
               <div className="metallic-panel p-6">
                 <h3 className="font-display text-xl font-bold text-white mb-4 border-b border-white/10 pb-2">

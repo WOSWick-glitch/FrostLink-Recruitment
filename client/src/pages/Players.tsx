@@ -1,16 +1,20 @@
 import { Navbar } from "@/components/layout/Navbar";
-import { MOCK_PLAYERS } from "@/lib/mock-data";
 import { Search, Filter, Swords, ChevronDown, CheckCircle2, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import type { Player } from "@shared/schema";
 
 export default function Players() {
+  const { data: players = [], isLoading } = useQuery<Player[]>({
+    queryKey: ["/api/players"],
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      {/* Header */}
       <div className="border-b border-white/10 bg-card/50 backdrop-blur-md sticky top-16 z-40">
         <div className="container mx-auto px-4 md:px-6 py-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -28,16 +32,16 @@ export default function Players() {
                 <Input 
                   placeholder="Search by name, state, or ID..." 
                   className="pl-9 bg-black/40 border-white/10 focus-visible:ring-primary h-10"
+                  data-testid="input-search-players"
                 />
               </div>
-              <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 h-10 px-3">
+              <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 h-10 px-3" data-testid="button-filters">
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
               </Button>
             </div>
           </div>
           
-          {/* Quick Filters */}
           <div className="flex flex-wrap gap-2 mt-6">
             <Button variant="secondary" size="sm" className="bg-primary/20 text-primary border border-primary/50 hover:bg-primary/30">
               Transfer Ready
@@ -61,18 +65,22 @@ export default function Players() {
         </div>
       </div>
 
-      {/* Main Content */}
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
         <div className="flex justify-between items-center mb-6">
-          <p className="text-sm text-muted-foreground font-mono">Showing {MOCK_PLAYERS.length} players</p>
+          <p className="text-sm text-muted-foreground font-mono">
+            {isLoading ? "Loading..." : `Showing ${players.length} players`}
+          </p>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             Sort by: <span className="text-white font-medium cursor-pointer">Recently Updated</span> <ChevronDown className="w-4 h-4" />
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MOCK_PLAYERS.map(player => (
-            <div key={player.id} className={`metallic-panel group flex flex-col h-full hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden ${player.isPremium ? 'border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.15)]' : ''}`}>
+          {players.map(player => {
+            const endorsements = (player.endorsements || []) as any[];
+            const stats = (player.stats || {}) as any;
+            return (
+            <div key={player.id} data-testid={`card-player-${player.id}`} className={`metallic-panel group flex flex-col h-full hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden ${player.isPremium ? 'border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.15)]' : ''}`}>
               {player.isPremium && (
                 <div className="absolute -right-6 top-6 bg-blue-600 text-white text-[10px] font-bold px-8 py-1 rotate-45 flex items-center gap-1 shadow-[0_0_10px_rgba(59,130,246,0.5)] z-10">
                   <Star className="w-3 h-3 fill-white" /> PREMIUM
@@ -138,13 +146,14 @@ export default function Players() {
                   Updated {player.lastUpdated}
                 </span>
                 <Link href={`/player/${player.slug}`}>
-                  <Button size="sm" className="bg-primary/20 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/30">
+                  <Button size="sm" className="bg-primary/20 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/30" data-testid={`button-view-player-${player.id}`}>
                     View Profile
                   </Button>
                 </Link>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </main>
     </div>

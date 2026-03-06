@@ -1,14 +1,34 @@
 import { Navbar } from "@/components/layout/Navbar";
-import { MOCK_STATES, MOCK_ALLIANCES } from "@/lib/mock-data";
 import { useParams, Link } from "wouter";
 import { Globe2, Users, Flame, Shield, ChevronRight, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useQuery } from "@tanstack/react-query";
+import type { State, Alliance } from "@shared/schema";
 
 export default function StateProfile() {
   const { stateNumber } = useParams<{ stateNumber: string }>();
-  const state = MOCK_STATES.find(s => s.stateNumber === Number(stateNumber)) || MOCK_STATES[0];
-  const stateAlliances = MOCK_ALLIANCES.filter(a => a.stateNumber === state.stateNumber);
+  
+  const { data: state, isLoading } = useQuery<State>({
+    queryKey: [`/api/states/${stateNumber}`],
+  });
+  
+  const { data: allAlliances = [] } = useQuery<Alliance[]>({
+    queryKey: ["/api/alliances"],
+  });
+
+  if (isLoading || !state) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-muted-foreground font-mono">Loading state...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const stateAlliances = allAlliances.filter(a => a.stateNumber === state.stateNumber);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -16,7 +36,7 @@ export default function StateProfile() {
       
       <div className="border-b border-white/10 bg-black/40">
         <div className="container mx-auto px-4 md:px-6 py-3 flex items-center text-sm text-muted-foreground font-mono">
-          <Link href="/states"><a className="hover:text-white">States</a></Link>
+          <Link href="/states"><span className="hover:text-white cursor-pointer">States</span></Link>
           <ChevronRight className="w-4 h-4 mx-2" />
           <span className="text-white">State #{state.stateNumber}</span>
         </div>
@@ -24,7 +44,6 @@ export default function StateProfile() {
 
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
         
-        {/* State Header Header */}
         <div className="metallic-panel p-8 mb-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-8 opacity-5">
             <Globe2 className="w-48 h-48" />
@@ -56,7 +75,7 @@ export default function StateProfile() {
             </div>
             
             <div className="flex gap-3">
-               <Button variant="outline" className="border-white/10 bg-black/40 hover:bg-white/5 text-white">
+               <Button variant="outline" className="border-white/10 bg-black/40 hover:bg-white/5 text-white" data-testid="button-save-state">
                 Save State
               </Button>
             </div>
@@ -197,7 +216,7 @@ export default function StateProfile() {
                 <p className="text-muted-foreground max-w-md mx-auto">
                   Only verified State Staff can be listed here to prevent spam. Please log in to view Discord contact tags.
                 </p>
-                <Button className="mt-6 bg-primary/20 text-primary border border-primary/50">
+                <Button className="mt-6 bg-primary/20 text-primary border border-primary/50" data-testid="button-sign-in-contacts">
                   Sign in to View
                 </Button>
              </div>

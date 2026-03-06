@@ -1,18 +1,25 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/home/Hero";
-import { MOCK_ALLIANCES, MOCK_PLAYERS, MOCK_STATES } from "@/lib/mock-data";
 import { Shield, Swords, Globe2, Flame, ArrowRight, UserCheck, Snowflake } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import type { Alliance, Player } from "@shared/schema";
 
 export default function Home() {
+  const { data: alliances = [] } = useQuery<Alliance[]>({
+    queryKey: ["/api/alliances"],
+  });
+  const { data: players = [] } = useQuery<Player[]>({
+    queryKey: ["/api/players"],
+  });
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
         <Hero />
         
-        {/* Featured Section */}
         <section className="py-24 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 z-0"></div>
           
@@ -28,7 +35,6 @@ export default function Home() {
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
-              {/* Featured Alliances */}
               <div className="lg:col-span-2 space-y-6">
                 <div className="flex justify-between items-center border-b border-white/10 pb-2">
                   <h3 className="text-xl font-medium text-white flex items-center gap-2">
@@ -36,15 +42,15 @@ export default function Home() {
                     Top Recruiting Alliances
                   </h3>
                   <Link href="/alliances">
-                    <a className="text-sm text-primary hover:text-white flex items-center transition-colors">
+                    <span className="text-sm text-primary hover:text-white flex items-center transition-colors cursor-pointer">
                       View All <ArrowRight className="w-4 h-4 ml-1" />
-                    </a>
+                    </span>
                   </Link>
                 </div>
                 
                 <div className="grid md:grid-cols-2 gap-4">
-                  {MOCK_ALLIANCES.map(alliance => (
-                    <div key={alliance.id} className={`metallic-panel p-5 group transition-colors relative overflow-hidden ${alliance.isSponsored ? 'border-yellow-500/50 shadow-[0_0_15px_rgba(234,179,8,0.1)]' : 'hover:border-primary/50'}`}>
+                  {alliances.map(alliance => (
+                    <div key={alliance.id} data-testid={`card-featured-alliance-${alliance.id}`} className={`metallic-panel p-5 group transition-colors relative overflow-hidden ${alliance.isSponsored ? 'border-yellow-500/50 shadow-[0_0_15px_rgba(234,179,8,0.1)]' : 'hover:border-primary/50'}`}>
                       {alliance.isSponsored && (
                         <div className="absolute top-0 right-0 bg-yellow-500 text-black text-[10px] font-bold px-3 py-0.5 rounded-bl-lg">
                           SPONSORED
@@ -81,7 +87,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Player Spotlight */}
               <div className="space-y-6">
                 <div className="flex justify-between items-center border-b border-white/10 pb-2">
                   <h3 className="text-xl font-medium text-white flex items-center gap-2">
@@ -91,9 +96,8 @@ export default function Home() {
                 </div>
                 
                 <div className="flex flex-col gap-4">
-                  {MOCK_PLAYERS.slice(0, 2).map(player => (
-                    <div key={player.id} className="metallic-panel p-5 relative overflow-hidden group">
-                      {/* Character sheet subtle bg effect */}
+                  {players.slice(0, 2).map(player => (
+                    <div key={player.id} data-testid={`card-spotlight-player-${player.id}`} className="metallic-panel p-5 relative overflow-hidden group">
                       <div className="absolute top-0 right-0 p-4 opacity-10">
                         <Swords className="w-16 h-16" />
                       </div>
@@ -135,7 +139,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* How It Works */}
         <section className="py-24 bg-black/40 border-y border-white/5">
           <div className="container mx-auto px-4 md:px-6 text-center">
             <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-16">
@@ -164,7 +167,6 @@ export default function Home() {
         </section>
       </main>
       
-      {/* Mini Footer / Trust & Safety */}
       <footer className="py-8 bg-background border-t border-white/10">
         <div className="container mx-auto px-4 md:px-6 flex flex-col items-center gap-6">
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-4">
@@ -173,9 +175,9 @@ export default function Home() {
               <span className="font-display font-bold text-lg text-white">FROST<span className="text-primary">LINK</span></span>
             </div>
             <div className="text-sm text-muted-foreground flex gap-4">
-              <Link href="/about"><a className="hover:text-white">About</a></Link>
-              <Link href="/rules"><a className="hover:text-white">Rules</a></Link>
-              <Link href="/privacy"><a className="hover:text-white">Privacy</a></Link>
+              <Link href="/about"><span className="hover:text-white cursor-pointer">About</span></Link>
+              <Link href="/rules"><span className="hover:text-white cursor-pointer">Rules</span></Link>
+              <Link href="/privacy"><span className="hover:text-white cursor-pointer">Privacy</span></Link>
             </div>
             <div className="text-xs text-muted-foreground/50">
               A controlled recruitment environment. Verified endorsements only.

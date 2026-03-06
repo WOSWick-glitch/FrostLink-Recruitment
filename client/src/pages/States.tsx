@@ -1,11 +1,16 @@
 import { Navbar } from "@/components/layout/Navbar";
-import { MOCK_STATES } from "@/lib/mock-data";
 import { Search, Filter, Globe2, ChevronDown, Users, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import type { State } from "@shared/schema";
 
 export default function States() {
+  const { data: states = [], isLoading } = useQuery<State[]>({
+    queryKey: ["/api/states"],
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -27,9 +32,10 @@ export default function States() {
                 <Input 
                   placeholder="Search state number..." 
                   className="pl-9 bg-black/40 border-white/10 focus-visible:ring-primary h-10"
+                  data-testid="input-search-states"
                 />
               </div>
-              <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 h-10 px-3">
+              <Button variant="outline" className="border-white/10 bg-white/5 hover:bg-white/10 h-10 px-3" data-testid="button-filters">
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
               </Button>
@@ -52,12 +58,14 @@ export default function States() {
 
       <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
         <div className="flex justify-between items-center mb-6">
-          <p className="text-sm text-muted-foreground font-mono">Showing {MOCK_STATES.length} states</p>
+          <p className="text-sm text-muted-foreground font-mono">
+            {isLoading ? "Loading..." : `Showing ${states.length} states`}
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MOCK_STATES.map(state => (
-            <div key={state.id} className="metallic-panel group flex flex-col h-full hover:border-primary/50 transition-colors">
+          {states.map(state => (
+            <div key={state.id} data-testid={`card-state-${state.id}`} className="metallic-panel group flex flex-col h-full hover:border-primary/50 transition-colors">
               <div className="p-5 flex-1">
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">
@@ -110,7 +118,7 @@ export default function States() {
                   Updated {state.lastUpdated}
                 </span>
                 <Link href={`/state/${state.stateNumber}`}>
-                  <Button size="sm" className="bg-primary/20 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/30">
+                  <Button size="sm" className="bg-primary/20 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/30" data-testid={`button-view-state-${state.id}`}>
                     View State
                   </Button>
                 </Link>
