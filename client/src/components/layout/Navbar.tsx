@@ -23,13 +23,18 @@ export function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
           <Link href="/states">
-            <a className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">States</a>
+            <span className="text-sm font-medium text-muted-foreground hover:text-white transition-colors cursor-pointer">States</span>
           </Link>
           <Link href="/alliances">
-            <a className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Alliances</a>
+            <span className="text-sm font-medium text-muted-foreground hover:text-white transition-colors cursor-pointer">Alliances</span>
           </Link>
           <Link href="/players">
-            <a className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Players</a>
+            <span className="text-sm font-medium text-muted-foreground hover:text-white transition-colors cursor-pointer">Players</span>
+          </Link>
+          <Link href="/tracker">
+            <span className="text-sm font-medium text-primary hover:text-white transition-colors cursor-pointer flex items-center gap-1">
+              Tracker
+            </span>
           </Link>
           
           <div className="w-px h-4 bg-white/10 mx-2"></div>
@@ -58,13 +63,16 @@ export function Navbar() {
         <div className="md:hidden border-t border-white/10 bg-card p-4 space-y-4">
           <div className="flex flex-col space-y-2">
             <Link href="/states">
-              <a className="px-4 py-2 rounded-md hover:bg-white/5 text-sm font-medium">States</a>
+              <span className="px-4 py-2 rounded-md hover:bg-white/5 text-sm font-medium cursor-pointer">States</span>
             </Link>
             <Link href="/alliances">
-              <a className="px-4 py-2 rounded-md hover:bg-white/5 text-sm font-medium">Alliances</a>
+              <span className="px-4 py-2 rounded-md hover:bg-white/5 text-sm font-medium cursor-pointer">Alliances</span>
             </Link>
             <Link href="/players">
-              <a className="px-4 py-2 rounded-md hover:bg-white/5 text-sm font-medium">Players</a>
+              <span className="px-4 py-2 rounded-md hover:bg-white/5 text-sm font-medium cursor-pointer">Players</span>
+            </Link>
+            <Link href="/tracker">
+              <span className="px-4 py-2 rounded-md hover:bg-white/5 text-sm font-medium text-primary cursor-pointer">Tracker</span>
             </Link>
           </div>
           <div className="border-t border-white/10 pt-4 flex flex-col gap-2">
