@@ -44,12 +44,20 @@ export default function PlayerProfile() {
                 
                 <p className="text-muted-foreground font-mono mb-4">State #{player.currentStateNumber}</p>
                 
-                <div className={`px-4 py-1.5 rounded-full text-sm font-bold border mb-6 ${
+                <div className={`px-4 py-1.5 rounded-full text-sm font-bold border mb-2 ${
                     player.transferStatus === 'Ready' 
                       ? 'bg-green-500/20 text-green-400 border-green-500/50 shadow-[0_0_10px_rgba(34,197,94,0.2)]' 
                       : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50'
                   }`}>
                   Transfer: {player.transferStatus}
+                </div>
+
+                <div className={`px-4 py-1.5 rounded-full text-xs font-bold border mb-6 ${
+                    player.statsStatus === 'Up to Date' 
+                      ? 'bg-blue-500/20 text-blue-400 border-blue-500/50' 
+                      : 'bg-red-500/20 text-red-400 border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)] animate-pulse'
+                  }`}>
+                  Stats: {player.statsStatus || 'Unknown'}
                 </div>
 
                 <div className="w-full space-y-3 mt-4 text-left">

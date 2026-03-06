@@ -75,6 +75,7 @@ export const MOCK_PLAYERS = [
     notesPublic: "Looking for a competitive state to lead garrisons. Maxed out exclusive gear on top 3 heroes.",
     visibility: true,
     lastUpdated: "10 mins ago",
+    statsStatus: "Up to Date",
     reputation: 98,
     endorsements: [
       { id: 1, type: "verified_recruiter", tag: "Reliable Lead" },
@@ -101,6 +102,7 @@ export const MOCK_PLAYERS = [
     notesPublic: "Looking for a peaceful drama-free state to grow.",
     visibility: true,
     lastUpdated: "1 day ago",
+    statsStatus: "Up to Date",
     reputation: 85,
     endorsements: [
       { id: 3, type: "verified_recruiter", tag: "Friendly" }
@@ -110,6 +112,30 @@ export const MOCK_PLAYERS = [
       kills: "12,000,000",
       deaths: "1,100,000",
       marchCapacity: "210,000"
+    }
+  },
+  {
+    id: "player3",
+    slug: "shadow-blade",
+    displayName: "ShadowBlade",
+    currentStateNumber: 1042,
+    powerBucket: "150M+",
+    furnaceLevel: "FC 5",
+    roles: ["Rally Lead"],
+    transferStatus: "Ready",
+    language: "English",
+    playstyle: "Hardcore",
+    notesPublic: "Looking for a competitive SvS state. Will bring my own rally fillers.",
+    visibility: false,
+    lastUpdated: "3 weeks ago",
+    statsStatus: "Update Required",
+    reputation: 92,
+    endorsements: [],
+    stats: {
+      highestPower: "185,000,000",
+      kills: "95,000,000",
+      deaths: "12,200,000",
+      marchCapacity: "315,000"
     }
   }
 ];

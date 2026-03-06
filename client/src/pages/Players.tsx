@@ -86,12 +86,19 @@ export default function Players() {
                       Current State: <span className="text-white">#{player.currentStateNumber}</span>
                     </p>
                   </div>
-                  <div className={`text-xs font-mono px-2 py-1 rounded border ${
-                    player.transferStatus === 'Ready' 
-                      ? 'bg-green-500/20 text-green-400 border-green-500/30' 
-                      : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
-                  }`}>
-                    {player.transferStatus}
+                  <div className="flex flex-col gap-2 items-end">
+                    <div className={`text-xs font-mono px-2 py-1 rounded border ${
+                      player.transferStatus === 'Ready' 
+                        ? 'bg-green-500/20 text-green-400 border-green-500/30' 
+                        : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+                    }`}>
+                      {player.transferStatus}
+                    </div>
+                    {player.statsStatus === 'Update Required' && (
+                      <div className="text-[10px] font-bold px-2 py-1 rounded border bg-red-500/20 text-red-400 border-red-500/50 animate-pulse">
+                        UPDATE REQUIRED
+                      </div>
+                    )}
                   </div>
                 </div>
 
